@@ -113,16 +113,6 @@ for i,event in enumerate(events):
     event.getByLabel(jetLabel, jetHandle)
     jets = jetHandle.product()
 
-    for gp in genparticles:
-        if not gp.pdgId()==25:
-            continue
-        hasHiggsDaughter = False
-        for d in range(gp.numberOfDaughters()):
-            if gp.daughter(d).pdgId()==25:
-                hasHiggsDaughter = True
-        if not hasHiggsDaughter:
-            h.append(gp)
-
     higgsList=[]
     for gp in genparticles:
         if not gp.pdgId()==25:
