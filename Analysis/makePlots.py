@@ -53,7 +53,8 @@ mY_step = 200
 n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
     for mY in ([260] + range(300, mX-125, mY_step)):
-        f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_GenJetNoNu_20210602123957/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
+        #f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_GenJetNoNu_20210610132757/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
+        f = r.TFile("/users/ferencek/TRSM_analysis/condor_analysis_jobs_GenJetNoNu_20210610132757/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
         f.cd()
         h1_b = f.Get("h_multiplicityN_higgs_candidates")
         h2_b = f.Get('h_DeltaR_bb_vs_higgspt')
@@ -74,16 +75,22 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
 c = r.TCanvas("c", "",1200,800)
 c.cd()
 
-gr_gen.SetMinimum(0) # has to be placed before calling SetLimits (?!)
-gr_gen.SetMaximum(1) # has to be placed before calling SetLimits (?!)
-gr_gen.GetXaxis().SetLimits(3*125,4000)
-gr_gen.GetYaxis().SetLimits(2*125,4000-125)
+gr_gen.SetMinimum(0) # has to be called before SetLimits for SetLimits to have an effect (?!)
+gr_gen.SetMaximum(1) # has to be called before SetLimits for SetLimits to have an effect (?!)
+# however, SetLimits does not have the desired effect because with the "surface" drawing options the graph always stretches/squeezes to fill the full range
+#gr_gen.GetXaxis().SetLimits(0,4000)
+#gr_gen.GetYaxis().SetLimits(0,4000-125)
+#gr_gen.GetXaxis().SetLimits(3*125,4000)
+#gr_gen.GetYaxis().SetLimits(2*125,4000-125)
 gr_gen.Draw("cont4z")
 c.SaveAs("BoostedHiggsFraction_gen.pdf")
 
 gr_genjet.SetMinimum(0) # has to be placed before calling SetLimits (?!)
 gr_genjet.SetMaximum(1) # has to be placed before calling SetLimits (?!)
-gr_genjet.GetXaxis().SetLimits(3*125,4000)
-gr_genjet.GetYaxis().SetLimits(2*125,4000-125)
+# however, SetLimits does not have the desired effect because with the "surface" drawing options the graph always stretches/squeezes to fill the full range
+#gr_genjet.GetXaxis().SetLimits(0,4000)
+#gr_genjet.GetYaxis().SetLimits(0,4000-125)
+#gr_genjet.GetXaxis().SetLimits(3*125,4000)
+#gr_genjet.GetYaxis().SetLimits(2*125,4000-125)
 gr_genjet.Draw("cont4z")
 c.SaveAs("BoostedHiggsFraction_genjet.pdf")
