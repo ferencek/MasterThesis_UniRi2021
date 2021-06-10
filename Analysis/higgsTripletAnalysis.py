@@ -31,7 +31,6 @@ parser.add_option('--mY', type='int', action='store',
                   help='Y scalar mass')
 
 parser.add_option('--massPoint', action='store',
-                  default='M3_2000_M2_300',
                   dest='massPoint',
                   help='Mass point')
 
@@ -50,7 +49,7 @@ def DeltaPhi(v1, v2, c = 3.141592653589793):
 # output histogram file
 histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (options.mX, options.mY)
 if options.massPoint:
-    histo_filename = "MassDistributions_TRSM_XToHY_6b_%s.root" % options.massPoint
+    histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_%s.root" % options.massPoint
 f = ROOT.TFile(histo_filename, "RECREATE")
 f.cd()
 
