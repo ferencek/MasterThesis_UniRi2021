@@ -173,11 +173,11 @@ sed -i 's/ 99925 / 35 /g;s/ 99926 / 36 /g' /users/ferencek/store/TRSM_XToHY_6b/2
 
 # Submit Condor jobs to hadronize events
 cd /users/ferencek/TRSM_production/
-python hadronizeEvents_BP.py
+python hadronizeEvents.py --bp
 
 
 # Submit Condor jobs to run Delphes
 cd /users/ferencek/TRSM_production/
-python runDelphes_BP.py
+python runDelphes.py --bp
 
 -------------------------------------------
