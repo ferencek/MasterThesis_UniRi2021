@@ -1,5 +1,4 @@
 from DataFormats.FWLite import Events, Handle
-import re
 from math import hypot
 import ROOT
 
@@ -139,14 +138,14 @@ for i,event in enumerate(events):
 
 
     higgs_candidatesList=[]
-    for j,jet in enumerate(jets):
+    for jet in jets:
         h_jetmass.Fill(jet.mass())
         h_jetphi.Fill(jet.phi())
         h_jeteta.Fill(jet.eta())
         h_jetpt.Fill(jet.pt())
         for h in higgsList:
             dphi=DeltaPhi(jet.phi(),h.phi())
-            dy= abs(jet.rapidity() - h.rapidity())
+            dy=abs(jet.rapidity() - h.rapidity())
             DeltaR=hypot(dy, dphi)
             if DeltaR < 0.2:
                 h_higgsmass_matched.Fill(h.mass())
@@ -160,11 +159,11 @@ for i,event in enumerate(events):
                 h_jet_pt_vs_higgs_pt.Fill(h.pt(),jet.pt())
                 h_jet_mass_vs_higgs_pt.Fill(h.pt(),jet.mass())
                 dphi1=DeltaPhi(jet.phi(), h.daughter(0).phi())
-                dy1= abs(jet.rapidity()- h.daughter(0).rapidity())
+                dy1=abs(jet.rapidity() - h.daughter(0).rapidity())
                 dphi2=DeltaPhi(jet.phi(), h.daughter(1).phi())
-                dy2= abs(jet.rapidity()- h.daughter(1).rapidity())
-                dR1 = hypot(dy1, dphi1)
-                dR2= hypot(dy2, dphi2)
+                dy2=abs(jet.rapidity() - h.daughter(1).rapidity())
+                dR1=hypot(dy1, dphi1)
+                dR2=hypot(dy2, dphi2)
                 h_min_DR_vs_higgs_pt.Fill(h.pt(),min(dR1,dR2))
                 h_max_DR_vs_higgs_pt.Fill(h.pt(),max(dR1,dR2))
                 h_DeltaR_vs_higgs_pt.Fill(h.pt(),DeltaR)
