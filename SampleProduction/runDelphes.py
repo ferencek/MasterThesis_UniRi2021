@@ -101,10 +101,10 @@ cd ../..
 
 export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 
-wget http://cp3.irmp.ucl.ac.be/downloads/Delphes-3.4.2.tar.gz
-tar zxf Delphes-3.4.2.tar.gz
+wget http://cp3.irmp.ucl.ac.be/downloads/Delphes-3.5.0.tar.gz
+tar zxf Delphes-3.5.0.tar.gz
 
-cd Delphes-3.4.2
+cd Delphes-3.5.0
 ROOTCFLAGS=$(root-config --cflags --libs)
 sed -i 's/-std=c++0x //g' Makefile
 make -j 6
