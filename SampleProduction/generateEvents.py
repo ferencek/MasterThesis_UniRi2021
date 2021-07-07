@@ -1,5 +1,6 @@
 import os
 import re
+import datetime
 
 mX_min = 400
 #mX_min = 1400
@@ -73,7 +74,7 @@ exit $exitcode
 """
 
 
-condor_folder = 'condor_generate_events'
+condor_folder = 'condor_generate_events' + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 os.system('mkdir -p ' + condor_folder)
 
 # create Bash script

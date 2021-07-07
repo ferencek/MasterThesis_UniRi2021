@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import datetime
 
 # regular mass points
 mX_min = 400
@@ -122,6 +123,7 @@ exit $exitcode
 condor_folder = 'condor_delphes'
 if options.bp:
     condor_folder += '_BP'
+condor_folder = condor_folder + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 os.system('mkdir -p ' + condor_folder)
 
 # create Bash script
