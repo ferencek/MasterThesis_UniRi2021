@@ -28,6 +28,10 @@ parser.add_option('--bp', dest="bp", action='store_true',
                   help="Process TRSM benchmark points",
                   default=False)
 
+parser.add_option('--pu', dest="pu", action='store_true',
+                  help="Add pileup",
+                  default=False)
+
 (options, args) = parser.parse_args()
 
 
@@ -110,7 +114,7 @@ ROOTCFLAGS=$(root-config --cflags --libs)
 sed -i 's/-std=c++0x //g' Makefile
 make -j 6
 
-./DelphesCMSFWLite cards/delphes_card_CMS.tcl /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/DelphesCMS/TRSM_XToHY_6b_${MASSPOINT}_DelphesCMS.root /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/GEN/TRSM_XToHY_6b_${MASSPOINT}_GEN.root
+./DelphesCMSFWLite /users/ferencek/TRSM_production/delphes_card_CMS.tcl /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/DelphesCMS/TRSM_XToHY_6b_${MASSPOINT}_DelphesCMS.root /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/GEN/TRSM_XToHY_6b_${MASSPOINT}_GEN.root
 exitcode=$?
 
 echo ""
@@ -123,13 +127,19 @@ exit $exitcode
 condor_folder = 'condor_delphes'
 if options.bp:
     condor_folder += '_BP'
+if options.pu:
+    condor_folder += '_PU'
 condor_folder = condor_folder + '_' + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 os.system('mkdir -p ' + condor_folder)
 
 # create Bash script
 bash_path = os.path.join(condor_folder,'runDelphes.sh')
 bash_script = open(bash_path,'w')
-bash_script.write(bash_template)
+bash_content = bash_template
+if options.pu:
+    bash_content = re.sub('delphes_card_CMS.tcl','delphes_card_CMS_PileUp.tcl',bash_content)
+    bash_content = re.sub('_DelphesCMS.root','_DelphesCMSPileUp.root',bash_content)
+bash_script.write(bash_content)
 bash_script.close()
 os.system('chmod +x ' + bash_path)
 

@@ -43,9 +43,10 @@ cd /users/ferencek/TRSM_production/
 python hadronizeEvents.py
 
 
-# Submit Condor jobs to run Delphes
+# Submit Condor jobs to run Delphes (--pu adds pileup)
 cd /users/ferencek/TRSM_production/
 python runDelphes.py
+python runDelphes.py --pu
 
 -------------------------------------------
 TRSM benchmark points - New model
@@ -176,8 +177,9 @@ cd /users/ferencek/TRSM_production/
 python hadronizeEvents.py --bp
 
 
-# Submit Condor jobs to run Delphes
+# Submit Condor jobs to run Delphes (--pu adds pileup)
 cd /users/ferencek/TRSM_production/
 python runDelphes.py --bp
+python runDelphes.py --bp --pu
 
 -------------------------------------------
