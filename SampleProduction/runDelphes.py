@@ -18,7 +18,7 @@ failedMassPoints = []
 massPoints_BP = ['M3_1600_M2_500_BPb', 'M3_2000_M2_300_BPd', 'M3_2000_M2_800_BPe', 'M3_2500_M2_300_BPf']
 failedMassPoints_BP = []
 
-sleep_minutes = 10
+sleep_minutes = 20
 
 
 from optparse import OptionParser
