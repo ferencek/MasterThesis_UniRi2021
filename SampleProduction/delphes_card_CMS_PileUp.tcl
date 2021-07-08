@@ -39,9 +39,6 @@ set ExecutionPath {
   JetEnergyScale
 
   FatJetFinder
-  PileUpFatJetID
-  FatJetPileUpSubtractor
-  FatJetEnergyScale
 
   PhotonEfficiency
   PhotonIsolation
@@ -657,7 +654,7 @@ module FastJetFinder FatJetFinder {
   set OutputArray jets
 
   # area algorithm: 0 Do not compute area, 1 Active area explicit ghosts, 2 One ghost passive area, 3 Passive area, 4 Voronoi, 5 Active area
-  set AreaAlgorithm 1
+  #set AreaAlgorithm 1
 
   # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
   set JetAlgorithm 6
@@ -969,7 +966,8 @@ module TreeWriter TreeWriter {
   add Branch UniqueObjectFinder/photons Photon Photon
   add Branch UniqueObjectFinder/muons Muon Muon
 
-  add Branch FatJetEnergyScale/jets FatJet Jet
+  #add Branch FatJetEnergyScale/jets FatJet Jet
+  add Branch FatJetFinder/jets FatJet Jet
 
   add Branch MissingET/momentum MissingET MissingET
   add Branch ScalarHT/energy ScalarHT ScalarHT
