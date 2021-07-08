@@ -33,6 +33,10 @@ parser.add_option('--massPoint', action='store',
                   dest='massPoint',
                   help='Mass point')
 
+parser.add_option('--pu', dest="pu", action='store_true',
+                  help="Process file with pileup",
+                  default=False)
+
 (options, args) = parser.parse_args()
 
 
@@ -49,6 +53,8 @@ def DeltaPhi(v1, v2, c = 3.141592653589793):
 histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i_DelphesCMS.root" % (options.mX, options.mY)
 if options.massPoint:
     histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_%s_DelphesCMS.root" % options.massPoint
+if options.pu:
+    histo_filename = histo_filename.replace('_DelphesCMS.root','_DelphesCMSPileUp.root')
 f = ROOT.TFile(histo_filename, "RECREATE")
 f.cd()
 
@@ -89,6 +95,8 @@ h_multiplicityN_higgs_candidates = ROOT.TH1F("h_multiplicityN_higgs_candidates",
 ifile = "/STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/DelphesCMS/TRSM_XToHY_6b_M3_%i_M2_%i_DelphesCMS.root" % (options.mX, options.mY)
 if options.massPoint:
     ifile = "/STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/DelphesCMS/TRSM_XToHY_6b_%s_DelphesCMS.root" % options.massPoint
+if options.pu:
+    ifile = ifile.replace('_DelphesCMS.root','_DelphesCMSPileUp.root')
 
 evtFile = ROOT.TFile.Open(ifile)
 events = evtFile.Get("Delphes")
