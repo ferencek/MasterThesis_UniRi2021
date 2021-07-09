@@ -55,12 +55,12 @@ f.cd()
 
 # define histograms
 h_jetmass = ROOT.TH1F("h_jetmass", "h_jetmass", 300,0,300)
-h_jetpt = ROOT.TH1F("h_jetpt;", "h_jetpt", 300,100e4, 6e5)
+h_jetpt = ROOT.TH1F("h_jetpt;", "h_jetpt", 250,0, 2500)
 h_jetphi = ROOT.TH1F("h_jetphi", "h_jetphi", 300,-4,4)
 h_jeteta = ROOT.TH1F("h_jeteta", "h_jeteta", 300,-4,4)
 
 h_higgsmass = ROOT.TH1F("h_higgsmass", "h_higgsmass", 300,0,300)
-h_higgspt = ROOT.TH1F("h_higgspt;", "h_higgspt", 300,100e4, 6e5)
+h_higgspt = ROOT.TH1F("h_higgspt;", "h_higgspt", 250,0, 2500)
 h_higgsphi = ROOT.TH1F("h_higgsphi", "h_higgsphi", 300,-4,4)
 h_higgseta = ROOT.TH1F("h_higgseta", "h_higgseta", 300,-4,4)
 

@@ -61,22 +61,22 @@ f.cd()
 
 # define histograms
 h_jetmass = ROOT.TH1F("h_jetmass", "h_jetmass", 300,0,300)
-h_jetpt = ROOT.TH1F("h_jetpt;", "h_jetpt", 300,100e4, 6e5)
+h_jetpt = ROOT.TH1F("h_jetpt;", "h_jetpt", 250,0, 2500)
 h_jetphi = ROOT.TH1F("h_jetphi", "h_jetphi", 300,-4,4)
 h_jeteta = ROOT.TH1F("h_jeteta", "h_jeteta", 300,-4,4)
 
 h_higgsmass = ROOT.TH1F("h_higgsmass", "h_higgsmass", 300,0,300)
-h_higgspt = ROOT.TH1F("h_higgspt;", "h_higgspt", 300,100e4, 6e5)
+h_higgspt = ROOT.TH1F("h_higgspt;", "h_higgspt", 250,0, 2500)
 h_higgsphi = ROOT.TH1F("h_higgsphi", "h_higgsphi", 300,-4,4)
 h_higgseta = ROOT.TH1F("h_higgseta", "h_higgseta", 300,-4,4)
 
 h_higgsmass_matched = ROOT.TH1F("h_higgsmass_matched", "h_higgsmass_matched", 300,0,300)
-h_higgspt_matched = ROOT.TH1F("h_higgspt_matched;", "h_higgspt_matched", 300,100e4, 6e5)
+h_higgspt_matched = ROOT.TH1F("h_higgspt_matched;", "h_higgspt_matched", 250,0, 2500)
 h_higgsphi_matched = ROOT.TH1F("h_higgsphi_matched", "h_higgsphi_matched", 300,-4,4)
 h_higgseta_matched = ROOT.TH1F("h_higgseta_matched", "h_higgseta_matched", 300,-4,4)
 
 h_jetmass_matched = ROOT.TH1F("h_jetmass_matched", "h_jetmass_matched", 1000,0,1000)
-h_jetpt_matched = ROOT.TH1F("h_jetpt_matched;", "h_jetpt_matched", 300,100e4, 6e5)
+h_jetpt_matched = ROOT.TH1F("h_jetpt_matched;", "h_jetpt_matched", 250,0, 2500)
 h_jetphi_matched = ROOT.TH1F("h_jetphi_matched", "h_jetphi_matched", 300,-4,4)
 h_jeteta_matched = ROOT.TH1F("h_jeteta_matched", "h_jeteta_matched", 300,-4,4)
 
