@@ -83,6 +83,7 @@ h_max_DR_vs_higgs_pt = ROOT.TH2F("h_max_DR_vs_higgs_pt", ";p^{Higgs}_{T} [GeV];#
 h_higgs_pt_all= ROOT.TH1F("h_higgs_pt_all", ";p^{Higgs}_{T} [GeV]",300,0,2000)
 h_DeltaR_bb_vs_higgspt = ROOT.TH2F("h_DeltaR_bb_vs_higgspt", ";p^{Higgs}_{T} [GeV];#DeltaR(b,b)",300,100,1500,300,0,1.5)
 h_multiplicityN_higgs_candidates = ROOT.TH1F("h_multiplicityN_higgs_candidates", "h_multiplicityN_higgs_candidates", 5,-0.5,4.5)
+h_multiplicityN_higgs_candidates_boosted = ROOT.TH1F("h_multiplicityN_higgs_candidates_boosted", "h_multiplicityN_higgs_candidates_boosted", 5,-0.5,4.5)
 
 
 # input file
@@ -112,6 +113,7 @@ for i,event in enumerate(events):
     jets = jetHandle.product()
 
     higgsList=[]
+    higgscount=0
     for gp in genparticles:
         if not gp.pdgId()==25:
             continue
@@ -135,6 +137,8 @@ for i,event in enumerate(events):
             dy=abs(d1.rapidity()-d2.rapidity())
             DeltaR = hypot(dphi, dy)
             h_DeltaR_bb_vs_higgspt.Fill(gp.pt(),DeltaR)
+            if DeltaR < 0.8:
+                higgscount +=1
 
 
     higgs_candidatesList=[]
@@ -171,6 +175,8 @@ for i,event in enumerate(events):
             higgs_candidatesList.append(jet)
 
     h_multiplicityN_higgs_candidates.Fill(len(higgs_candidatesList))
+    h_multiplicityN_higgs_candidates_boosted.Fill(higgscount)
+    
 
 
 f.Write()
