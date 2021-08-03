@@ -47,17 +47,51 @@ bkg = r.TH2F("bkg",";m_{X} [GeV];m_{Y} [GeV]",105,0,4200,105,0,4200)
 bkg.Draw()
 
 
+gr_BP = r.TGraph()
+
+n = 0
+for (mX, mY) in [(1600, 500), (2000, 300), (2000, 800),  (2500, 300)]:
+        gr_BP.SetPoint(n,mX,mY)
+        n += 1
+
+gr_BP.SetMarkerStyle(4)
+gr_BP.SetMarkerColor(r.kBlue)
+
+gr_BP.Draw("SAME P")
+
+
 mX_min = 400
 mX_max = 4000
 mX_step = 200
 mY_step = 200
 
-e = r.TEllipse()
-e.SetLineColor(r.kRed)
+gr = r.TGraph()
 
+n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
     for mY in ([260] + range(300, mX-125, mY_step)):
         print ("(mX, mY) = (%i, %i)" % (mX, mY))
-        e.DrawEllipse(mX,mY,10,15,0,360,0)
+        gr.SetPoint(n,mX,mY)
+        n += 1
+
+gr.SetMarkerStyle(20)
+gr.SetMarkerColor(r.kRed)
+gr.SetMarkerSize(0.6)
+
+gr.Draw("SAME P")
+
+pline = r.TPolyLine()
+pline.SetPoint(0,0,0)
+pline.SetPoint(1,375,0)
+pline.SetPoint(2,375,375-125)
+pline.SetPoint(3,4200,4200-125)
+pline.SetPoint(4,4200,4200)
+pline.SetPoint(5,0,4200)
+pline.SetPoint(6,0,0)
+pline.SetFillColor(r.kGray)
+pline.SetFillStyle(3344)
+pline.Draw("f")
+
+r.gPad.RedrawAxis()
 
 c.SaveAs("mass_points.pdf")
