@@ -74,6 +74,11 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
         n += 1
 
 #############################
+# The "surface" drawing options ("surf", "col", "cont") impose their own internal coordinate system
+# which complicates overlay of additional objects on the plot and requires extra steps. The code
+# below is based on discussion and instructions provided in
+# https://root-forum.cern.ch/t/drawing-a-single-contour-over-a-tgraph2d-using-cont4/12061
+#############################
 ## create canvas
 c = r.TCanvas("c", "",1200,800)
 c.cd()
