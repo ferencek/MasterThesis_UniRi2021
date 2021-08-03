@@ -1,4 +1,5 @@
 import ROOT as r
+import copy
 
 #---------------------------------------------------------------------
 # to run in the batch mode (to prevent canvases from popping up)
@@ -53,7 +54,8 @@ mY_step = 200
 n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
     for mY in ([260] + range(300, mX-125, mY_step)):
-        f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_GenJetNoNu_20210602123957/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
+        f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_20210802145153/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
+        #f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_GenJetNoNu_20210602123957/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
         #f = r.TFile("/users/ferencek/TRSM_analysis/condor_analysis_jobs_GenJetNoNu_20210610132757/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
         f.cd()
         h1_b = f.Get("h_multiplicityN_higgs_candidates")
@@ -71,26 +73,119 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
         gr_genjet.SetPoint(n,mX,mY,frac_genjet)
         n += 1
 
+#############################
 ## create canvas
 c = r.TCanvas("c", "",1200,800)
 c.cd()
 
-gr_gen.SetMinimum(0) # has to be called before SetLimits for SetLimits to have an effect (?!)
-gr_gen.SetMaximum(1) # has to be called before SetLimits for SetLimits to have an effect (?!)
+gr_dummy = r.TGraph()
+gr_dummy.SetPoint(0,1000,3000)
+
+pad1 = r.TPad("pad1","",0,0,1,1)
+pad2 = r.TPad("pad2","",0.1,0.1,0.85,0.9)
+pad2.SetFillStyle(4000) # will be transparent
+
+pad1.Draw()
+pad1.cd()
+
+gr_gen.SetMinimum(0) # has to be placed before calling TAxis methods (?!)
+gr_gen.SetMaximum(1) # has to be placed before calling TAxis methods (?!)
 # however, SetLimits does not have the desired effect because with the "surface" drawing options the graph always stretches/squeezes to fill the full range
 #gr_gen.GetXaxis().SetLimits(0,4000)
 #gr_gen.GetYaxis().SetLimits(0,4000-125)
 #gr_gen.GetXaxis().SetLimits(3*125,4000)
 #gr_gen.GetYaxis().SetLimits(2*125,4000-125)
+gr_gen.GetXaxis().SetTickLength(0)
+gr_gen.GetYaxis().SetTickLength(0)
+
 gr_gen.Draw("cont4z")
+
+xmin = gr_gen.GetXaxis().GetXmin()
+xmax = gr_gen.GetXaxis().GetXmax()
+ymin = gr_gen.GetYaxis().GetXmin()
+ymax = gr_gen.GetYaxis().GetXmax()
+
+#print xmin, xmax, ymin, ymax
+
+pad2.Range(xmin,ymin,xmax,ymax)
+pad2.Draw()
+pad2.cd()
+
+gr_dummy.Draw("SAME *") # necessary to get the tick marks
+
+pline = r.TPolyLine()
+pline.SetPoint(0,xmin,xmin-125.)
+pline.SetPoint(1,xmax,xmax-125.)
+pline.SetPoint(2,xmin,xmax-125.)
+pline.SetPoint(3,xmin,xmin-125.)
+pline.SetFillColor(10)
+pline.SetFillStyle(1001)
+pline.SetLineColor(2)
+pline.SetLineWidth(2)
+pline.Draw("f")
+pline_hatched = copy.deepcopy(pline)
+pline_hatched.SetFillColor(r.kGray)
+pline_hatched.SetFillStyle(3344)
+pline_hatched.Draw("f")
+
+pad2.RedrawAxis()
+
 c.SaveAs("BoostedHiggsFraction_gen.pdf")
 
-gr_genjet.SetMinimum(0) # has to be placed before calling SetLimits (?!)
-gr_genjet.SetMaximum(1) # has to be placed before calling SetLimits (?!)
+#############################
+## create canvas
+c = r.TCanvas("c", "",1200,800)
+c.cd()
+
+pad1 = r.TPad("pad1","",0,0,1,1)
+pad2 = r.TPad("pad2","",0.1,0.1,0.85,0.9)
+pad2.SetFillStyle(4000) # will be transparent
+
+pad1.Draw()
+pad1.cd()
+
+gr_genjet.SetMinimum(0) # has to be placed before calling TAxis methods (?!)
+gr_genjet.SetMaximum(1) # has to be placed before calling TAxis methods (?!)
 # however, SetLimits does not have the desired effect because with the "surface" drawing options the graph always stretches/squeezes to fill the full range
 #gr_genjet.GetXaxis().SetLimits(0,4000)
 #gr_genjet.GetYaxis().SetLimits(0,4000-125)
 #gr_genjet.GetXaxis().SetLimits(3*125,4000)
 #gr_genjet.GetYaxis().SetLimits(2*125,4000-125)
+gr_genjet.GetXaxis().SetTickLength(0)
+gr_genjet.GetYaxis().SetTickLength(0)
+
 gr_genjet.Draw("cont4z")
+
+xmin = gr_genjet.GetXaxis().GetXmin()
+xmax = gr_genjet.GetXaxis().GetXmax()
+ymin = gr_genjet.GetYaxis().GetXmin()
+ymax = gr_genjet.GetYaxis().GetXmax()
+
+#print xmin, xmax, ymin, ymax
+
+pad2.Range(xmin,ymin,xmax,ymax)
+pad2.Draw()
+pad2.cd()
+
+gr_dummy.Draw("SAME *") # necessary to get the tick marks
+
+pline = r.TPolyLine()
+pline.SetPoint(0,xmin,xmin-125.)
+pline.SetPoint(1,xmax,xmax-125.)
+pline.SetPoint(2,xmin,xmax-125.)
+pline.SetPoint(3,xmin,xmin-125.)
+pline.SetFillColor(10)
+pline.SetFillStyle(1001)
+pline.SetLineColor(2)
+pline.SetLineWidth(2)
+pline.Draw("f")
+pline_hatched = copy.deepcopy(pline)
+pline_hatched.SetFillColor(r.kGray)
+pline_hatched.SetFillStyle(3344)
+pline_hatched.Draw("f")
+
+pad2.RedrawAxis()
+
 c.SaveAs("BoostedHiggsFraction_genjet.pdf")
+#############################
+
