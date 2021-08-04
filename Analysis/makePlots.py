@@ -45,6 +45,8 @@ gr_genjet = r.TGraph2D()
 gr_gen.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 gr_genjet.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 
+boosted_higgs_graphs = [r.TGraph2D(), r.TGraph2D(), r.TGraph2D(), r.TGraph2D()]
+
 mX_min = 400
 mX_max = 4000
 mX_step = 200
@@ -61,6 +63,7 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
         h1_b = f.Get("h_multiplicityN_higgs_candidates")
         h2_b = f.Get('h_DeltaR_bb_vs_higgspt')
         h2_n = f.Get('h_higgs_pt_all')
+        h1_n = f.Get('h_multiplicityN_higgs_candidates_boosted')
         frac_gen = h2_b.Integral(0,h2_b.GetNbinsX()+1,0,h2_b.GetYaxis().FindBin(0.8)-1)/ h2_n.Integral(0,h2_n.GetNbinsX()+1)
         nHiggsCands=0
         for i in range(1,5):
@@ -71,6 +74,9 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
         print (frac_genjet)
         gr_gen.SetPoint(n,mX,mY,frac_gen)
         gr_genjet.SetPoint(n,mX,mY,frac_genjet)
+        for count in range(4):
+            frac_gen = h1_n.GetBinContent(count+1) / h1_n.Integral()
+            boosted_higgs_graphs[count].SetPoint(n, mX, mY, frac_gen)
         n += 1
 
 #############################
