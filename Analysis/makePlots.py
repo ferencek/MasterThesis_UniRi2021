@@ -2,6 +2,69 @@ import ROOT as r
 import copy
 
 #---------------------------------------------------------------------
+def function (graph, name):
+
+    #############################
+    # The "surface" drawing options ("surf", "col", "cont") impose their own internal coordinate system
+    # which complicates overlay of additional objects on the plot and requires extra steps. The code
+    # below is based on discussion and instructions provided in
+    # https://root-forum.cern.ch/t/drawing-a-single-contour-over-a-tgraph2d-using-cont4/12061
+    #############################
+
+    c = r.TCanvas("c", "",1200,800)
+    c.cd()
+
+    gr_dummy = r.TGraph()
+    gr_dummy.SetPoint(0,1000,3000)
+
+    pad1 = r.TPad("pad1","",0,0,1,1)
+    pad2 = r.TPad("pad2","",0.1,0.1,0.85,0.9)
+    pad2.SetFillStyle(4000) # will be transparent
+
+    pad1.Draw()
+    pad1.cd()
+
+    graph.SetMinimum(0) # has to be placed before calling TAxis methods (?!)
+    graph.SetMaximum(1) # has to be placed before calling TAxis methods (?!)
+   
+    graph.GetXaxis().SetTickLength(0)
+    graph.GetYaxis().SetTickLength(0)
+
+    graph.Draw("cont4z")
+
+    xmin = graph.GetXaxis().GetXmin()
+    xmax = graph.GetXaxis().GetXmax()
+    ymin = graph.GetYaxis().GetXmin()
+    ymax = graph.GetYaxis().GetXmax()
+
+    #print xmin, xmax, ymin, ymax
+
+    pad2.Range(xmin,ymin,xmax,ymax)
+    pad2.Draw()
+    pad2.cd()
+
+    gr_dummy.Draw("SAME *") # necessary to get the tick marks
+
+    pline = r.TPolyLine()
+    pline.SetPoint(0,xmin,xmin-125.)
+    pline.SetPoint(1,xmax,xmax-125.)
+    pline.SetPoint(2,xmin,xmax-125.)
+    pline.SetPoint(3,xmin,xmin-125.)
+    pline.SetFillColor(10)
+    pline.SetFillStyle(1001)
+    pline.SetLineColor(2)
+    pline.SetLineWidth(2)
+    pline.Draw("f")
+    pline_hatched = copy.deepcopy(pline)
+    pline_hatched.SetFillColor(r.kGray)
+    pline_hatched.SetFillStyle(3344)
+    pline_hatched.Draw("f")
+
+    pad2.RedrawAxis()
+
+    c.SaveAs(name)
+
+
 # to run in the batch mode (to prevent canvases from popping up)
 r.gROOT.SetBatch()
 
@@ -45,7 +108,13 @@ gr_genjet = r.TGraph2D()
 gr_gen.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 gr_genjet.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 
-boosted_higgs_graphs = [r.TGraph2D(), r.TGraph2D(), r.TGraph2D(), r.TGraph2D()]
+boosted_higgs_graphsGen = [r.TGraph2D(), r.TGraph2D(), r.TGraph2D(), r.TGraph2D()]
+boosted_higgs_graphsGenJet = [r.TGraph2D(), r.TGraph2D(), r.TGraph2D(), r.TGraph2D()]
+for i in range(4):
+    boosted_higgs_graphsGen[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
+    boosted_higgs_graphsGenJet[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
+
+
 
 mX_min = 400
 mX_max = 4000
@@ -76,127 +145,19 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
         gr_genjet.SetPoint(n,mX,mY,frac_genjet)
         for count in range(4):
             frac_gen = h1_n.GetBinContent(count+1) / h1_n.Integral()
-            boosted_higgs_graphs[count].SetPoint(n, mX, mY, frac_gen)
+            frac_genjet = h1_b.GetBinContent(count+1) / h1_b.Integral()
+            boosted_higgs_graphsGen[count].SetPoint(n, mX, mY, frac_gen)
+            boosted_higgs_graphsGenJet[count].SetPoint(n, mX, mY, frac_genjet)
         n += 1
+        
+function (gr_gen, "BoostedHiggsFraction_gen.pdf")
+function (gr_genjet, "BoostedHiggsFraction_genjet.pdf")
+for i in range (4):  
+   function(boosted_higgs_graphsGen[i], "Event_Selection_eff_%i_gen.pdf"%i)
+   function(boosted_higgs_graphsGenJet[i],"Event_Selection_eff_%i_genJet.pdf"%i) 
+    
 
-#############################
-# The "surface" drawing options ("surf", "col", "cont") impose their own internal coordinate system
-# which complicates overlay of additional objects on the plot and requires extra steps. The code
-# below is based on discussion and instructions provided in
-# https://root-forum.cern.ch/t/drawing-a-single-contour-over-a-tgraph2d-using-cont4/12061
-#############################
-## create canvas
-c = r.TCanvas("c", "",1200,800)
-c.cd()
 
-gr_dummy = r.TGraph()
-gr_dummy.SetPoint(0,1000,3000)
 
-pad1 = r.TPad("pad1","",0,0,1,1)
-pad2 = r.TPad("pad2","",0.1,0.1,0.85,0.9)
-pad2.SetFillStyle(4000) # will be transparent
 
-pad1.Draw()
-pad1.cd()
-
-gr_gen.SetMinimum(0) # has to be placed before calling TAxis methods (?!)
-gr_gen.SetMaximum(1) # has to be placed before calling TAxis methods (?!)
-# however, SetLimits does not have the desired effect because with the "surface" drawing options the graph always stretches/squeezes to fill the full range
-#gr_gen.GetXaxis().SetLimits(0,4000)
-#gr_gen.GetYaxis().SetLimits(0,4000-125)
-#gr_gen.GetXaxis().SetLimits(3*125,4000)
-#gr_gen.GetYaxis().SetLimits(2*125,4000-125)
-gr_gen.GetXaxis().SetTickLength(0)
-gr_gen.GetYaxis().SetTickLength(0)
-
-gr_gen.Draw("cont4z")
-
-xmin = gr_gen.GetXaxis().GetXmin()
-xmax = gr_gen.GetXaxis().GetXmax()
-ymin = gr_gen.GetYaxis().GetXmin()
-ymax = gr_gen.GetYaxis().GetXmax()
-
-#print xmin, xmax, ymin, ymax
-
-pad2.Range(xmin,ymin,xmax,ymax)
-pad2.Draw()
-pad2.cd()
-
-gr_dummy.Draw("SAME *") # necessary to get the tick marks
-
-pline = r.TPolyLine()
-pline.SetPoint(0,xmin,xmin-125.)
-pline.SetPoint(1,xmax,xmax-125.)
-pline.SetPoint(2,xmin,xmax-125.)
-pline.SetPoint(3,xmin,xmin-125.)
-pline.SetFillColor(10)
-pline.SetFillStyle(1001)
-pline.SetLineColor(2)
-pline.SetLineWidth(2)
-pline.Draw("f")
-pline_hatched = copy.deepcopy(pline)
-pline_hatched.SetFillColor(r.kGray)
-pline_hatched.SetFillStyle(3344)
-pline_hatched.Draw("f")
-
-pad2.RedrawAxis()
-
-c.SaveAs("BoostedHiggsFraction_gen.pdf")
-
-#############################
-## create canvas
-c = r.TCanvas("c", "",1200,800)
-c.cd()
-
-pad1 = r.TPad("pad1","",0,0,1,1)
-pad2 = r.TPad("pad2","",0.1,0.1,0.85,0.9)
-pad2.SetFillStyle(4000) # will be transparent
-
-pad1.Draw()
-pad1.cd()
-
-gr_genjet.SetMinimum(0) # has to be placed before calling TAxis methods (?!)
-gr_genjet.SetMaximum(1) # has to be placed before calling TAxis methods (?!)
-# however, SetLimits does not have the desired effect because with the "surface" drawing options the graph always stretches/squeezes to fill the full range
-#gr_genjet.GetXaxis().SetLimits(0,4000)
-#gr_genjet.GetYaxis().SetLimits(0,4000-125)
-#gr_genjet.GetXaxis().SetLimits(3*125,4000)
-#gr_genjet.GetYaxis().SetLimits(2*125,4000-125)
-gr_genjet.GetXaxis().SetTickLength(0)
-gr_genjet.GetYaxis().SetTickLength(0)
-
-gr_genjet.Draw("cont4z")
-
-xmin = gr_genjet.GetXaxis().GetXmin()
-xmax = gr_genjet.GetXaxis().GetXmax()
-ymin = gr_genjet.GetYaxis().GetXmin()
-ymax = gr_genjet.GetYaxis().GetXmax()
-
-#print xmin, xmax, ymin, ymax
-
-pad2.Range(xmin,ymin,xmax,ymax)
-pad2.Draw()
-pad2.cd()
-
-gr_dummy.Draw("SAME *") # necessary to get the tick marks
-
-pline = r.TPolyLine()
-pline.SetPoint(0,xmin,xmin-125.)
-pline.SetPoint(1,xmax,xmax-125.)
-pline.SetPoint(2,xmin,xmax-125.)
-pline.SetPoint(3,xmin,xmin-125.)
-pline.SetFillColor(10)
-pline.SetFillStyle(1001)
-pline.SetLineColor(2)
-pline.SetLineWidth(2)
-pline.Draw("f")
-pline_hatched = copy.deepcopy(pline)
-pline_hatched.SetFillColor(r.kGray)
-pline_hatched.SetFillStyle(3344)
-pline_hatched.Draw("f")
-
-pad2.RedrawAxis()
-
-c.SaveAs("BoostedHiggsFraction_genjet.pdf")
-#############################
 
