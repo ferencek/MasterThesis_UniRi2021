@@ -69,7 +69,7 @@ gr = r.TGraph()
 
 n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
-    for mY in ([260] + range(300, mX-125, mY_step)):
+    for mY in sorted(list(set([260,mX-140])) + range(300, mX-125, mY_step)):
         print ("(mX, mY) = (%i, %i)" % (mX, mY))
         gr.SetPoint(n,mX,mY)
         n += 1
