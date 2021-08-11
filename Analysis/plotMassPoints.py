@@ -69,7 +69,7 @@ gr = r.TGraph()
 
 n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
-    for mY in ([260] + range(300, mX-125, mY_step)):
+    for mY in sorted(list(set([260,mX-140])) + range(300, mX-125, mY_step)):
         print ("(mX, mY) = (%i, %i)" % (mX, mY))
         gr.SetPoint(n,mX,mY)
         n += 1
@@ -82,12 +82,13 @@ gr.Draw("SAME P")
 
 pline = r.TPolyLine()
 pline.SetPoint(0,0,0)
-pline.SetPoint(1,375,0)
-pline.SetPoint(2,375,375-125)
-pline.SetPoint(3,4200,4200-125)
-pline.SetPoint(4,4200,4200)
-pline.SetPoint(5,0,4200)
-pline.SetPoint(6,0,0)
+pline.SetPoint(1,4200,0)
+pline.SetPoint(2,4200,2*125)
+pline.SetPoint(3,3*125,2*125)
+pline.SetPoint(4,4200,4200-125)
+pline.SetPoint(5,4200,4200)
+pline.SetPoint(6,0,4200)
+pline.SetPoint(7,0,0)
 pline.SetFillColor(r.kGray)
 pline.SetFillStyle(3344)
 pline.Draw("f")
