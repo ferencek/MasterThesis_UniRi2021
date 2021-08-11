@@ -108,8 +108,8 @@ gr_genjet = r.TGraph2D()
 gr_gen.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 gr_genjet.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 
-boosted_higgs_graphsGen = [r.TGraph2D(), r.TGraph2D(), r.TGraph2D(), r.TGraph2D()]
-boosted_higgs_graphsGenJet = [r.TGraph2D(), r.TGraph2D(), r.TGraph2D(), r.TGraph2D()]
+boosted_higgs_graphsGen = [r.TGraph2D() for i in range(4)]
+boosted_higgs_graphsGenJet = [r.TGraph2D() for i in range(4)]
 for i in range(4):
     boosted_higgs_graphsGen[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
     boosted_higgs_graphsGenJet[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
