@@ -103,13 +103,13 @@ r.gStyle.SetStatFont(42)
 r.gROOT.ForceStyle()
 #---------------------------------------------------------------------
 
-gr_gen = r.TGraph2D()
-gr_genjet = r.TGraph2D()
+gr_gen = copy.deepcopy(r.TGraph2D())
+gr_genjet = copy.deepcopy(r.TGraph2D())
 gr_gen.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 gr_genjet.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
 
-boosted_higgs_graphsGen = [r.TGraph2D() for i in range(4)]
-boosted_higgs_graphsGenJet = [r.TGraph2D() for i in range(4)]
+boosted_higgs_graphsGen = [copy.deepcopy(r.TGraph2D()) for i in range(4)]
+boosted_higgs_graphsGenJet = [copy.deepcopy(r.TGraph2D()) for i in range(4)]
 for i in range(4):
     boosted_higgs_graphsGen[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
     boosted_higgs_graphsGenJet[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
@@ -152,10 +152,10 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
 #BP lists         
 points = [(1600, 500),(2000, 300),(2000, 800),(2500, 300)]
 suffix = ["BPb","BPd", "BPe","BPf"]
-gr_gen_BP = [r.TGraph2D() for point in points]
-gr_genjet_BP = [r.TGraph2D() for point in points]
-boosted_higgs_graphsGen_BP = [[r.TGraph2D() for point in points] for i in range (4)]
-boosted_higgs_graphsGenJet_BP = [[r.TGraph2D() for point in points] for i in range (4)]
+gr_gen_BP = [copy.deepcopy(r.TGraph2D()) for point in points]
+gr_genjet_BP = [copy.deepcopy(r.TGraph2D()) for point in points]
+boosted_higgs_graphsGen_BP = [[copy.deepcopy(r.TGraph2D()) for point in points] for i in range (4)]
+boosted_higgs_graphsGenJet_BP = [[copy.deepcopy(r.TGraph2D()) for point in points] for i in range (4)]
 
 
 for p in range(len(points)):
