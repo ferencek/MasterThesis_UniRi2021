@@ -119,7 +119,7 @@ if len(failedMassPoints):
 else:
     # loop over mass points
     for mX in range(mX_min, mX_max + mX_step, mX_step):
-        for mY in ([260] + range(300, mX-125, mY_step)):
+        for mY in sorted(list(set([260,mX-140])) + range(300, mX-125, mY_step)):
             processMassPoint(mX,mY,condor_folder,options.script)
 
 print ('---------------------------------------')
