@@ -40,7 +40,7 @@ r.gStyle.SetStatFont(42)
 r.gROOT.ForceStyle()
 
 #---------------------------------------------------------------------
-def plot(graph, graphs_BP, name):
+def plot(graph, graphs_BP, name, plotBP=True):
 
     #############################
     # The "surface" drawing options ("surf", "col", "cont") impose their own internal coordinate system
@@ -51,9 +51,6 @@ def plot(graph, graphs_BP, name):
 
     c = r.TCanvas("c", "",1200,800)
     c.cd()
-
-    gr_dummy = r.TGraph()
-    gr_dummy.SetPoint(0,1000,3000)
 
     pad1 = r.TPad("pad1","",0,0,1,1)
     pad2 = r.TPad("pad2","",0.1,0.1,0.85,0.9)
@@ -70,6 +67,10 @@ def plot(graph, graphs_BP, name):
 
     graph.Draw("cont4z")
 
+    # get color palette
+    pad1.Update()
+    palette = graph.GetHistogram().GetListOfFunctions().FindObject("palette")
+
     xmin = graph.GetXaxis().GetXmin()
     xmax = graph.GetXaxis().GetXmax()
     ymin = graph.GetYaxis().GetXmin()
@@ -81,7 +82,29 @@ def plot(graph, graphs_BP, name):
     pad2.Draw()
     pad2.cd()
 
-    gr_dummy.Draw("SAME *") # necessary to get the tick marks
+    if plotBP:
+        gr_list = []
+        for gr_BP in graphs_BP:
+            gr_list.append(r.TGraph())
+            x = gr_BP.GetX()[0]
+            y = gr_BP.GetY()[0]
+            z = gr_BP.GetZ()[0]
+            gr_list[-1].SetPoint(0,x,y)
+            ci = palette.GetValueColor(z)
+            gr_list[-1].SetMarkerStyle(8)
+            gr_list[-1].SetMarkerSize(1.1)
+            gr_list[-1].SetMarkerColor(ci)
+            gr_list[-1].Draw("SAME P")
+            gr_list.append(r.TGraph())
+            gr_list[-1].SetPoint(0,x,y)
+            gr_list[-1].SetMarkerStyle(4)
+            gr_list[-1].SetMarkerSize(1.2)
+            gr_list[-1].SetMarkerColor(r.kRed)
+            gr_list[-1].Draw("SAME P")
+    else:
+        gr_dummy = r.TGraph()
+        gr_dummy.SetPoint(0,1000,3000)
+        gr_dummy.Draw("SAME *") # necessary to get the tick marks (unless the BP graphs are drawn)
 
     pline = r.TPolyLine()
     pline.SetPoint(0,xmin,xmin-125.)
