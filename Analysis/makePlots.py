@@ -146,8 +146,8 @@ mY_step = 200
 
 n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
-    for mY in ([260] + range(300, mX-125, mY_step)):
-        f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_20210802145153/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
+    for mY in sorted(list(set([260,mX-140])) + range(300, mX-125, mY_step)):
+        f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_20210812113913/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
         f.cd()
         h1_b = f.Get("h_multiplicityN_higgs_candidates")
         h2_b = f.Get('h_DeltaR_bb_vs_higgspt')
