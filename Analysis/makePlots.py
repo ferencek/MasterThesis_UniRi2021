@@ -23,13 +23,14 @@ r.gStyle.SetPadTickX(1)  # to get the tick marks on the opposite side of the fra
 r.gStyle.SetPadTickY(1)  # to get the tick marks on the opposite side of the frame
 
 # tweak margins
-#r.gStyle.SetPadTopMargin(0.05);
-#r.gStyle.SetPadBottomMargin(0.13);
+r.gStyle.SetPadTopMargin(0.1);
+r.gStyle.SetPadBottomMargin(0.1);
 r.gStyle.SetPadLeftMargin(0.10);
 r.gStyle.SetPadRightMargin(0.15);
 
 # tweak axis title offsets
-r.gStyle.SetTitleOffset(1.2, "Y");
+r.gStyle.SetTitleOffset(1.25, "Y");
+r.gStyle.SetTitleOffset(1.25, "Z");
 
 # set nicer fonts
 r.gStyle.SetTitleFont(42, "")
@@ -49,7 +50,7 @@ def plot(graph, graphs_BP, name, plotBP=True):
     # https://root-forum.cern.ch/t/drawing-a-single-contour-over-a-tgraph2d-using-cont4/12061
     #############################
 
-    c = r.TCanvas("c", "",1200,800)
+    c = r.TCanvas("c", "",1000,1000)
     c.cd()
 
     pad1 = r.TPad("pad1","",0,0,1,1)
@@ -75,6 +76,9 @@ def plot(graph, graphs_BP, name, plotBP=True):
     xmax = graph.GetXaxis().GetXmax()
     ymin = graph.GetYaxis().GetXmin()
     ymax = graph.GetYaxis().GetXmax()
+
+    graph.GetXaxis().SetLimits(graph.GetXaxis().GetXmin()/1000.,graph.GetXaxis().GetXmax()/1000.)
+    graph.GetYaxis().SetLimits(graph.GetYaxis().GetXmin()/1000.,graph.GetYaxis().GetXmax()/1000.)
 
     #print xmin, xmax, ymin, ymax
 
@@ -118,7 +122,8 @@ def plot(graph, graphs_BP, name, plotBP=True):
     pline.Draw("f")
     pline_hatched = copy.deepcopy(pline)
     pline_hatched.SetFillColor(r.kGray)
-    pline_hatched.SetFillStyle(3344)
+    #pline_hatched.SetFillStyle(3344)
+    pline_hatched.SetFillStyle(3002)
     pline_hatched.Draw("f")
 
     pad2.RedrawAxis()
@@ -129,14 +134,14 @@ def plot(graph, graphs_BP, name, plotBP=True):
 # regular mass points
 gr_gen = copy.deepcopy(r.TGraph2D())
 gr_genjet = copy.deepcopy(r.TGraph2D())
-gr_gen.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
-gr_genjet.SetTitle(";m_{X} [GeV];m_{Y} [GeV];Fraction of boosted Higgs boson candidates")
+gr_gen.SetTitle(";m_{X} [TeV];m_{Y} [TeV];Fraction of boosted Higgs boson candidates")
+gr_genjet.SetTitle(";m_{X} [TeV];m_{Y} [TeV];Fraction of boosted Higgs boson candidates")
 
 boosted_higgs_graphsGen = [copy.deepcopy(r.TGraph2D()) for i in range(4)]
 boosted_higgs_graphsGenJet = [copy.deepcopy(r.TGraph2D()) for i in range(4)]
 for i in range(4):
-    boosted_higgs_graphsGen[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
-    boosted_higgs_graphsGenJet[i].SetTitle(";m_{X} [GeV];m_{Y} [GeV];Event selection eff. (%i H cand.)"%i)
+    boosted_higgs_graphsGen[i].SetTitle(";m_{X} [TeV];m_{Y} [TeV];Event selection eff. (%i H cand.)"%i)
+    boosted_higgs_graphsGenJet[i].SetTitle(";m_{X} [TeV];m_{Y} [TeV];Event selection eff. (%i H cand.)"%i)
 
 
 mX_min = 400
