@@ -1,0 +1,5 @@
+set group_subprocesses Auto
+define bb = b b~
+import model TRSM
+generate p p > h3, (h3 > h2 h1, (h2 > h1 h1, h1 > bb bb), h1 > bb bb)
+output TRSM_XToHY_6b_M3_M3MASS_M2_M2MASS -nojpeg

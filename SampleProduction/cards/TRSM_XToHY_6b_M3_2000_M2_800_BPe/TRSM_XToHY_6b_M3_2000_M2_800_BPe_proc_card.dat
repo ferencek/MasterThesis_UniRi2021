@@ -1,0 +1,4 @@
+set group_subprocesses Auto
+import model loop_sm_twoscalar
+generate p p > h h h [QCD]
+output TRSM_XToHY_6b_M3_2000_M2_800_BPe -nojpeg
