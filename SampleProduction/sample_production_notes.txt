@@ -53,6 +53,11 @@ Delphes samples turned out to be buggy as far as the pileup simulation was conce
 The effect of pileup on the jet mass seemed greatly underestimated. The samples
 were finally not used.
 ###################
+
+# Submit Condor jobs to run CMSSW and produce MINIAOD files with pileup overlaid
+cd /users/ferencek/TRSM_production/
+python runCMSSW_MINIAOD.py
+
 -------------------------------------------
 TRSM benchmark points - New model
 -------------------------------------------
