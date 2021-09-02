@@ -13,7 +13,7 @@ git clone -b cmsdas2020 --depth=1 https://github.com/agrohsje/genproductions.git
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /home/ferencek/TRSM_production/genprod_mg261_slc7/bin/MadGraph5_aMCatNLO
-time ./gridpack_generation.sh TRSM_XToHY_6b_M3_3000_M2_300 ../../../TRSM_XToHY_6b_MG5_cards/TRSM_XToHY_6b_M3_3000_M2_300_manual local
+time ./gridpack_generation.sh TRSM_XToHY_6b_M3_3000_M2_300 ../../../../../../STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/datacards/TRSM_XToHY_6b_M3_3000_M2_300 local
 
 
 # Automated gridpack production
@@ -48,6 +48,11 @@ cd /users/ferencek/TRSM_production/
 python runDelphes.py
 python runDelphes.py --pu
 
+###################
+Delphes samples turned out to be buggy as far as the pileup simulation was concerned.
+The effect of pileup on the jet mass seemed greatly underestimated. The samples
+were finally not used.
+###################
 -------------------------------------------
 TRSM benchmark points - New model
 -------------------------------------------
@@ -62,7 +67,7 @@ TRSM_XToHY_6b_M3_2500_M2_300_BPf
 
 whose parameter values are defined in TRSM_benchmark_points.dat. Below TRSM_XToHY_6b_M3_2000_M2_300_BPd is used as an example
 
-cd ${HOME}/CMSDAS_2020/MCGen/
+cd /users/ferencek/CMSDAS_2020/MCGen/
 export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 scram project CMSSW CMSSW_10_6_5
@@ -92,7 +97,7 @@ Card files for TRSM_XToHY_6b_M3_2000_M2_300_BPd:
 /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/datacards/TRSM_XToHY_6b_M3_2000_M2_300_BPd/TRSM_XToHY_6b_M3_2000_M2_300_BPd_run_card.dat
 /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/datacards/TRSM_XToHY_6b_M3_2000_M2_300_BPd/TRSM_XToHY_6b_M3_2000_M2_300_BPd_madspin_card.dat
 
-cd ${HOME}/CMSDAS_2020/MCGen
+cd /users/ferencek/CMSDAS_2020/MCGen
 wget https://cms-project-generators.web.cern.ch/cms-project-generators/MG5_aMC_v2.6.1.tar.gz
 tar xf MG5_aMC_v2.6.1.tar.gz
 cd MG5_aMC_v2_6_1
@@ -120,45 +125,6 @@ References:
 https://answers.launchpad.net/mg5amcnlo/+question/270858
 https://cp3.irmp.ucl.ac.be/projects/madgraph/wiki/MadSpin#Fulllistofoptions
 -------------------
-Warnings encountered:
-
-
-generate p p > h h h [QCD]
-
-WARNING: Some loop diagrams contributing to this process are discarded because they are not pure (QCD)-perturbation.
-Make sure you did not want to include them.
-
-launch
-
-Please note that the automatic computation of the width is
-    only valid in narrow-width approximation and at tree-level.
-
---> Tania said these are safe to ignore
-
-MadSpin crashing before loading the heft model
-
-INFO: generating the production square matrix element
-INFO: generate p p > h h h   --no_warning=duplicate;define pert_QCD = -4 -3 -2 -1 1 2 3 4 21;add process p p > h h h  pert_QCD  --no_warning=duplicate; 
-Command "generate_events run_01" interrupted with error:
-NoDiagramException : No amplitudes generated from process Process: g/u/c/d/s/u~/c~/d~/s~ g/u/c/d/s/u~/c~/d~/s~ > h h h WEIGHTED=18 @1. Please enter a valid process
-
--------------------
-Possible other ways to define the process (NOT TESTED):
-
-p p > h h h [QCD]
-
-p p p > iota0 > h h h [QCD]
-
-p p > iota, iota > h h h [QCD]
-
-p p > b b~ b b~ b b~ [QCD]
-
--------------------------------------------
-# Copy data cards
-
-cp -pr /users/ferencek/CMSDAS_2020/MCGen/TRSM_XToHY_6b_MG5_cards/TRSM_XToHY_6b_M3_*BP* /STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/datacards/
-
-
 # Copy LHE files and fix particle ID codes
 
 gunzip -c /users/ferencek/CMSDAS_2020/MCGen/MG5_aMC_v2_6_1/TRSM_XToHY_6b_M3_1600_M2_500_BPb/Events/run_01_decayed_1/unweighted_events.lhe.gz > /users/ferencek/store/TRSM_XToHY_6b/2017/13TeV/LHE/TRSM_XToHY_6b_M3_1600_M2_500_BPb.lhe
@@ -181,5 +147,44 @@ python hadronizeEvents.py --bp
 cd /users/ferencek/TRSM_production/
 python runDelphes.py --bp
 python runDelphes.py --bp --pu
+
+###################
+Delphes samples turned out to be buggy as far as the pileup simulation was concerned.
+The effect of pileup on the jet mass seemed greatly underestimated. The samples
+were finally not used.
+###################
+-------------------------------------------
+Warnings encountered:
+
+
+generate p p > h h h [QCD]
+
+WARNING: Some loop diagrams contributing to this process are discarded because they are not pure (QCD)-perturbation.
+Make sure you did not want to include them.
+
+launch
+
+Please note that the automatic computation of the width is
+    only valid in narrow-width approximation and at tree-level.
+
+--> Tania said these are safe to ignore
+
+
+This is how MadSpin was crashing before loading the heft model to perform h > b b~ decays
+
+INFO: generating the production square matrix element
+INFO: generate p p > h h h   --no_warning=duplicate;define pert_QCD = -4 -3 -2 -1 1 2 3 4 21;add process p p > h h h  pert_QCD  --no_warning=duplicate; 
+Command "generate_events run_01" interrupted with error:
+NoDiagramException : No amplitudes generated from process Process: g/u/c/d/s/u~/c~/d~/s~ g/u/c/d/s/u~/c~/d~/s~ > h h h WEIGHTED=18 @1. Please enter a valid process
+
+-------------------
+Possible other ways to define the process (NOT TESTED):
+
+
+p p p > iota0 > h h h [QCD]
+
+p p > iota, iota > h h h [QCD]
+
+p p > b b~ b b~ b b~ [QCD]
 
 -------------------------------------------
