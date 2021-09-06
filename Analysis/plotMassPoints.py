@@ -36,7 +36,7 @@ r.gStyle.SetTextFont(42)
 r.gStyle.SetStatFont(42)
 r.gROOT.ForceStyle()
 #---------------------------------------------------------------------
-
+plotBP=False
 
 # create canvas
 c = r.TCanvas("c", "",1000,1000)
@@ -57,7 +57,7 @@ for (mX, mY) in [(1600, 500), (2000, 300), (2000, 800),  (2500, 300)]:
 gr_BP.SetMarkerStyle(4)
 gr_BP.SetMarkerColor(r.kBlue)
 
-gr_BP.Draw("SAME P")
+if plotBP: gr_BP.Draw("SAME P")
 
 
 mX_min = 400
