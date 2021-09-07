@@ -41,7 +41,7 @@ r.gStyle.SetStatFont(42)
 r.gROOT.ForceStyle()
 
 #---------------------------------------------------------------------
-def plot(graph, graphs_BP, name, plotBP=True):
+def plot(graph, graphs_BP, name, plotBP=False):
 
     #############################
     # The "surface" drawing options ("surf", "col", "cont") impose their own internal coordinate system
@@ -96,13 +96,13 @@ def plot(graph, graphs_BP, name, plotBP=True):
             gr_list[-1].SetPoint(0,x,y)
             ci = palette.GetValueColor(z)
             gr_list[-1].SetMarkerStyle(8)
-            gr_list[-1].SetMarkerSize(1.1)
+            gr_list[-1].SetMarkerSize(1.5)
             gr_list[-1].SetMarkerColor(ci)
             gr_list[-1].Draw("SAME P")
             gr_list.append(r.TGraph())
             gr_list[-1].SetPoint(0,x,y)
             gr_list[-1].SetMarkerStyle(4)
-            gr_list[-1].SetMarkerSize(1.2)
+            gr_list[-1].SetMarkerSize(1.6)
             gr_list[-1].SetMarkerColor(r.kRed)
             gr_list[-1].Draw("SAME P")
     else:
