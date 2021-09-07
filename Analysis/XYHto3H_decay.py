@@ -3,7 +3,7 @@ import math
 
 mX = 3000.
 mY = 300.
-mH = 120.
+mH = 125.
 
 Delta = mX**2 - mY**2 - mH**2
 pz = math.sqrt((Delta**2 - 4 * mH**2 * mY**2)/(4 * mX**2))
