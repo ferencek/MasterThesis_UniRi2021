@@ -33,6 +33,11 @@ parser.add_option('--massPoint', action='store',
                   dest='massPoint',
                   help='Mass point')
 
+parser.add_option("--withNu", action="store_true",
+                  dest="withNu",
+                  help="Include neutrinos in GenJets",
+                  default=False)
+
 (options, args) = parser.parse_args()
 
 
@@ -49,6 +54,8 @@ def DeltaPhi(v1, v2, c = 3.141592653589793):
 histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (options.mX, options.mY)
 if options.massPoint:
     histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_%s.root" % options.massPoint
+if options.withNu:
+    histo_filename.replace(".root", "_WithNu.root")
 f = ROOT.TFile(histo_filename, "RECREATE")
 f.cd()
 
@@ -99,7 +106,8 @@ gpHandle = Handle ("std::vector<reco::GenParticle>")
 jetHandle = Handle ("std::vector<reco::GenJet>")
 gpLabel = ("genParticles")
 jetLabel= ("ak8GenJetsNoNu")
-#jetLabel = ("ak8GenJets")
+if options.withNu:
+    jetLabel = ("ak8GenJets")
 
 # loop over events
 for i,event in enumerate(events):
