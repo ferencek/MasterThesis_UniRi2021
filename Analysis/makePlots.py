@@ -143,15 +143,20 @@ for i in range(4):
     boosted_higgs_graphsGen[i].SetTitle(";m_{X} [TeV];m_{Y} [TeV];Event selection eff. (%i H cand.)"%i)
     boosted_higgs_graphsGenJet[i].SetTitle(";m_{X} [TeV];m_{Y} [TeV];Event selection eff. (%i H cand.)"%i)
 
-
 mX_min = 400
 mX_max = 4000
 mX_step = 200
 mY_step = 200
 
+values = open('mass_point_values.txt', 'w')
+header = '{:3s}  {:^4s}  {:^4s}  {:8s}  {:11s}  {:5s}  {:9s}  {:5s}  {:9s}  {:5s}  {:9s}\n'.format('idx','mX','mY','frac_gen','frac_genjet','eff_1','eff_jet_1','eff_2','eff_jet_2','eff_3','eff_jet_3')
+values.write(header)
+values.write('-' * (len(header)-1) + '\n')
+
 n = 0
 for mX in range(mX_min, mX_max + mX_step, mX_step):
     for mY in sorted(list(set([260,mX-140])) + range(300, mX-125, mY_step)):
+        values.write('{:>3d}  {:>4d}  {:>4d}'.format(n+1, mX, mY))
         f = r.TFile("/users/lcalic/nobackup/cmsdas_2020_gen/condor_analysis_jobs_20210812113913/HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (mX, mY))
         f.cd()
         h1_b = f.Get("h_multiplicityN_higgs_candidates")
@@ -166,6 +171,7 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
         print ("(mX, mY) = (%i, %i)" % (mX, mY))
         print (frac_gen)
         print (frac_genjet)
+        values.write('    {:.3f}      {:.3f}   '.format(frac_gen, frac_genjet))
         gr_gen.SetPoint(n,mX,mY,frac_gen)
         gr_genjet.SetPoint(n,mX,mY,frac_genjet)
         for count in range(4):
@@ -173,7 +179,11 @@ for mX in range(mX_min, mX_max + mX_step, mX_step):
             frac_genjet = h1_b.GetBinContent(count+1) / h1_b.Integral()
             boosted_higgs_graphsGen[count].SetPoint(n, mX, mY, frac_gen)
             boosted_higgs_graphsGenJet[count].SetPoint(n, mX, mY, frac_genjet)
+            if count > 0: values.write('  {:.3f}    {:.3f}  '.format(frac_gen, frac_genjet))
+        values.write('\n')
         n += 1
+
+values.close()
 
 #---------------------------------------------------------------------
 # benchmark points
