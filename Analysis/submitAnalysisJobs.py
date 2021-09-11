@@ -15,7 +15,7 @@ failedMassPoints = []
 
 from optparse import OptionParser
 
-usage = "Usage: python %prog [options] \n\nExample: python %prog -o condor_analysis_jobs -s higgsTripletAnalysis.py"
+usage = "Usage: python %prog [options] \n\nExample: python %prog -o condor_analysis_jobs -s higgsTripletAnalysis.py [--withNu]"
 
 # input parameters
 parser = OptionParser(usage=usage)
@@ -27,6 +27,11 @@ parser.add_option('-o', '--output', action='store',
 parser.add_option('-s', '--script', action='store',
                   dest='script',
                   help='Python script (This parameter is mandatory)')
+
+parser.add_option("--withNu", action="store_true",
+                  dest="withNu",
+                  help="Include neutrinos in GenJets",
+                  default=False)
 
 (options, args) = parser.parse_args()
 
@@ -87,7 +92,7 @@ scram project CMSSW CMSSW_10_6_0
 cd CMSSW_10_6_0/src/
 eval `scram runtime -sh`
 
-python ${OUTPUTDIR}/${SCRIPT} --mX=${M3MASS} --mY=${M2MASS}
+python ${OUTPUTDIR}/${SCRIPT} --mX=${M3MASS} --mY=${M2MASS} DUMMY_NEUTRINO
 
 mv -v HISTOGRAMS_*.root ${OUTPUTDIR}
 exitcode=$?
@@ -108,7 +113,9 @@ os.system('cp -p %s %s' % (options.script, condor_folder))
 # create Bash script
 bash_path = os.path.join(condor_folder,'analysisJob.sh')
 bash_script = open(bash_path,'w')
-bash_script.write(bash_template)
+bash_content = bash_template
+bash_content = re.sub('DUMMY_NEUTRINO',('--withNu' if options.withNu else ''),bash_content)
+bash_script.write(bash_content)
 bash_script.close()
 os.system('chmod +x ' + bash_path)
 
