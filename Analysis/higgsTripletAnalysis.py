@@ -55,7 +55,7 @@ histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_M3_%i_M2_%i.root" % (options.mX, opti
 if options.massPoint:
     histo_filename = "HISTOGRAMS_TRSM_XToHY_6b_%s.root" % options.massPoint
 if options.withNu:
-    histo_filename.replace(".root", "_WithNu.root")
+    histo_filename = histo_filename.replace(".root", "_WithNu.root")
 f = ROOT.TFile(histo_filename, "RECREATE")
 f.cd()
 
