@@ -13,8 +13,9 @@ mY_step = 400
 failedMassPoints = []
 #failedMassPoints = [[1600, 500], [3000, 260], [3000, 300], [3000, 500], [3000, 700], [3000, 900], [3000, 1100], [3000, 1300]]
 
-#failedJobsList = ''
-failedJobsList = 'failed_jobs.txt'
+failedJobsList = ''
+# grep 'return value' path/to/Condor/folder/*.log | grep -v 'return value 0' > ../failed_jobs.txt
+#failedJobsList = 'failed_jobs.txt'
 
 # benchmark points
 massPoints_BP = ['M3_1600_M2_500_BPb', 'M3_2000_M2_300_BPd', 'M3_2000_M2_800_BPe', 'M3_2500_M2_300_BPf']
