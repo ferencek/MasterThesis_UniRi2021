@@ -9,8 +9,12 @@ mX_max = 4000
 mX_step = 400
 mY_step = 400
 
+
 failedMassPoints = []
 #failedMassPoints = [[1600, 500], [3000, 260], [3000, 300], [3000, 500], [3000, 700], [3000, 900], [3000, 1100], [3000, 1300]]
+
+#failedJobsList = ''
+failedJobsList = 'failed_jobs.txt'
 
 # benchmark points
 massPoints_BP = ['M3_1600_M2_500_BPb', 'M3_2000_M2_300_BPd', 'M3_2000_M2_800_BPe', 'M3_2500_M2_300_BPf']
@@ -28,10 +32,15 @@ parser.add_option('--bp', dest="bp", action='store_true',
 
 
 if not options.bp:
-    failedMassPoints_str = []
-    for mp in failedMassPoints:
-        failedMassPoints_str.append('M3_%i_M2_%i' % (mp[0],mp[1]))
-    failedMassPoints = failedMassPoints_str
+    if not failedJobsList:
+        failedMassPoints_str = []
+        for mp in failedMassPoints:
+            failedMassPoints_str.append('M3_%i_M2_%i' % (mp[0],mp[1]))
+        failedMassPoints = failedMassPoints_str
+    else:
+        job_list = open(failedJobsList, 'rb').read().splitlines()
+        for job in job_list:
+            failedMassPoints.append(job.split()[0].replace('TRSM_XToHY_6b_','').replace('.log:',''))
 else:
     failedMassPoints = failedMassPoints_BP
 
@@ -53,9 +62,20 @@ def processMassPoint(massPoint):
     # create jdl file
     jdl_path = os.path.join(condor_folder, ('TRSM_XToHY_6b_%s.jdl' % massPoint))
     jdl_file = open(jdl_path,'w')
+
+    # figure out if individual failed jobs are being resubmitted
+    singleJobs = False
+    job = ''
+    if re.search('_\w+_\d+_\d+$', massPoint) or re.search('_BP\w+_\d+$', massPoint):
+        singleJobs = True
+        job = massPoint.split('_')[-1]
+        massPoint = re.split('_\d+$', massPoint)[0]
+
     jdl_content = jdl_template
     jdl_content = re.sub('DUMMY_OUTPUTDIR',condor_folder,jdl_content)
     jdl_content = re.sub('DUMMY_MASSPOINT',massPoint,jdl_content)
+    jdl_content = re.sub('DUMMY_JOB',(job if singleJobs else '$(process)'),jdl_content)
+    jdl_content = re.sub('DUMMY_QUEUE',('' if singleJobs else '100'),jdl_content)
     jdl_file.write(jdl_content)
     jdl_file.close()
 
@@ -66,11 +86,11 @@ def processMassPoint(massPoint):
 jdl_template = """universe = vanilla
 Notification = never
 Executable = DUMMY_OUTPUTDIR/CMSSW_MINIAOD.sh
-Output = DUMMY_OUTPUTDIR/TRSM_XToHY_6b_DUMMY_MASSPOINT_$(Process).stdout
-Error = DUMMY_OUTPUTDIR/TRSM_XToHY_6b_DUMMY_MASSPOINT_$(Process).stderr
-Log = DUMMY_OUTPUTDIR/TRSM_XToHY_6b_DUMMY_MASSPOINT_$(Process).log
-Arguments = $(process) DUMMY_MASSPOINT 100
-Queue 100
+Output = DUMMY_OUTPUTDIR/TRSM_XToHY_6b_DUMMY_MASSPOINT_DUMMY_JOB.stdout
+Error = DUMMY_OUTPUTDIR/TRSM_XToHY_6b_DUMMY_MASSPOINT_DUMMY_JOB.stderr
+Log = DUMMY_OUTPUTDIR/TRSM_XToHY_6b_DUMMY_MASSPOINT_DUMMY_JOB.log
+Arguments = DUMMY_JOB DUMMY_MASSPOINT 100
+Queue DUMMY_QUEUE
 """
 
 # CMSSW cfg files below based on the matrix workflow 10224.0
