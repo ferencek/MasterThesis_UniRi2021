@@ -14,7 +14,7 @@ failedMassPoints = []
 #failedMassPoints = [[1600, 500], [3000, 260], [3000, 300], [3000, 500], [3000, 700], [3000, 900], [3000, 1100], [3000, 1300]]
 
 failedJobsList = ''
-# grep 'return value' path/to/Condor/folder/*.log | grep -v 'return value 0' > ../failed_jobs.txt
+# grep 'return value' path/to/Condor/folder/*.log | grep -v 'return value 0' > failed_jobs.txt
 #failedJobsList = 'failed_jobs.txt'
 
 # benchmark points
