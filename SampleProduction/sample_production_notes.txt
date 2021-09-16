@@ -58,6 +58,10 @@ were finally not used.
 cd /users/ferencek/TRSM_production/
 python runCMSSW_MINIAOD.py
 
+
+# To check for missing files and get a list of failed mass points
+python checkOutput.py path/to/output/files/
+
 -------------------------------------------
 TRSM benchmark points - New model
 -------------------------------------------
