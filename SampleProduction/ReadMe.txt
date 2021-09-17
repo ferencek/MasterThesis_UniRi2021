@@ -58,6 +58,10 @@ were finally not used.
 cd /users/ferencek/TRSM_production/
 python runCMSSW_MINIAOD.py
 
+# Submit Condor jobs to run CMSSW and produce NANOAOD files
+cd /users/ferencek/TRSM_production/
+python runCMSSW_NANOAOD.py
+
 
 # To check for missing files and get a list of failed mass points
 python checkOutput.py path/to/output/files/
