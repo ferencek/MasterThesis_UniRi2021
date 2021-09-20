@@ -67,7 +67,7 @@ tH2.Print()
 tH3 = ROOT.TLorentzVector()
 tH3.SetPxPyPzE(0,0,pzH,math.sqrt(mH**2 + pzH**2))
 tH3.Boost(boostY)
-print ("H2")
+print ("H3")
 tH3.Print()
 
 #tSumY = tH2 + tH3
