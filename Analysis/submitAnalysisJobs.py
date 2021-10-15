@@ -122,11 +122,11 @@ os.system('chmod +x ' + bash_path)
 
 if len(failedMassPoints):
     for mp in failedMassPoints:
-        processMassPoint(mp[0],mp[1],condor_folder,options.script)
+        processMassPoint(mp[0],mp[1],condor_folder,os.path.basename(options.script))
 else:
     # loop over mass points
     for mX in range(mX_min, mX_max + mX_step, mX_step):
         for mY in sorted(list(set([260,mX-140])) + range(300, mX-125, mY_step)):
-            processMassPoint(mX,mY,condor_folder,options.script)
+            processMassPoint(mX,mY,condor_folder,os.path.basename(options.script))
 
 print ('---------------------------------------')
