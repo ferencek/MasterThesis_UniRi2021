@@ -75,6 +75,6 @@ tH3.Print()
 
 print ("\nMasses:\n")
 
-print ("m12 = %f GeV^2" % (tH1 + tH2).M2())
-print ("m13 = %f GeV^2" % (tH1 + tH3).M2())
-print ("m23 = %f GeV^2" % (tH2 + tH3).M2())
+print ("m12 = %f GeV" % (tH1 + tH2).M())
+print ("m13 = %f GeV" % (tH1 + tH3).M())
+print ("m23 = %f GeV" % (tH2 + tH3).M())
