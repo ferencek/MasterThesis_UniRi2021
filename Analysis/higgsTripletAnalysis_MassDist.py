@@ -30,8 +30,8 @@ gpLabel = ("genParticles")
 f = ROOT.TFile("MassDistributions_TRSM_XToHY_6b_%s.root" % options.massPoint, "RECREATE")
 f.cd()
 
-h_m3H_distribution = ROOT.TH1F("h_m3H_distribution", ";m_{3H} [GeV]",2000,0,4000)
-h_mH2H3_vs_mH1H2 = ROOT.TH2F("h_mH2H3_vs_mH1H2", ";m_{H1H2} [GeV];m_{H2H3} [GeV]",1000,0,2000,1000,0,2000)
+h_m3H_distribution = ROOT.TH1F("h_m3H_distribution", ";m_{3H} [GeV]",2250,0,4500)
+h_mH2H3_vs_mH1H2 = ROOT.TH2F("h_mH2H3_vs_mH1H2", ";m_{H1H2} [GeV];m_{H2H3} [GeV]",1000,0,4500,1000,0,4500)
 
 ifile = "/STORE/ferencek/TRSM_XToHY_6b/2017/13TeV/GEN/TRSM_XToHY_6b_%s_GEN.root" % options.massPoint
 
