@@ -20,6 +20,11 @@ parser.add_option('--massPoint', action='store',
                   dest='massPoint',
                   help='Mass point')
 
+parser.add_option('--sortByPt', action='store_true',
+                  dest='sortByPt',
+                  help='Sort particles by pT',
+                  default=False)
+
 (options, args) = parser.parse_args()
 
 
@@ -59,7 +64,10 @@ for i,event in enumerate(events):
 
     #print('# of Higgs bosons found: %i' % len(h))
 
-    h.sort(key=lambda x: x.phi())
+    if options.sortByPt:
+        h.sort(key=lambda x: x.pt(), reverse=True)
+    else:
+        h.sort(key=lambda x: x.phi())
 
     tH1 = ROOT.TLorentzVector()
     tH1.SetPtEtaPhiE(h[0].pt(),h[0].eta(),h[0].phi(),h[0].energy())
